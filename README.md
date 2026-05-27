@@ -113,6 +113,10 @@ func main() {
 	})
 
 	app := fiber.New(fiber.Config{})
+	app.Use("/", func(c fiber.Ctx) error {
+		c.Locals("io", io) //This middleware is to attach socketio to the context of fiber
+		return c.Next()
+	})
 	app.Use("/socket.io", adaptor.HTTPHandler(io.HttpHandler()))
 	app.Listen(":3000")
 }
