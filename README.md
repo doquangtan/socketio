@@ -75,7 +75,7 @@ func main() {
 }
 ```
 
-Using with web-framework [Go Fiber](https://gofiber.io)
+Using with web-framework [Go Fiber v2](https://docs.gofiber.io/v2.x)
 
 ```go
 import (
@@ -93,6 +93,27 @@ func main() {
 	app := fiber.New(fiber.Config{})
 	app.Use("/", io.FiberMiddleware) //This middleware is to attach socketio to the context of fiber
 	app.Route("/socket.io", io.FiberRoute)
+	app.Listen(":3000")
+}
+```
+
+Using with web-framework [Go Fiber v3](https://gofiber.io)
+
+```go
+import (
+	"github.com/gofiber/fiber/v3"
+	"github.com/doquangtan/socketio/v4"
+)
+
+func main() {
+	io := socketio.New()
+
+	io.OnConnection(func(socket *socketio.Socket) {
+		// ...
+	})
+
+	app := fiber.New(fiber.Config{})
+	app.Use("/socket.io", adaptor.HTTPHandler(io.HttpHandler()))
 	app.Listen(":3000")
 }
 ```
